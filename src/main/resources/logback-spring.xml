@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Base logback configuration provided for compatibility with Spring Boot 1.1
+-->
+<configuration>
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>[ %d{yyyy-MM-dd HH:mm:ss.SSS} ] [ %-5level] %C %msg%n</Pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+	
+	<property name="LOG_ADDRESS" value="${LOG_PATH}/${LOG_FILE}"/>
+	
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_ADDRESS}</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>[ %d{yyyy-MM-dd HH:mm:ss.SSS} ] [ %-5level] %msg%n</Pattern>
+			<charset>utf8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_ADDRESS}-%d{yyyy-MM-dd}</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+	
+	<property name="LOG_REQUEST" value="${LOG_PATH}/log/atoilog.log"/>
+	<appender name="REQUEST_FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_REQUEST}</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>[ %d{yyyy-MM-dd HH:mm:ss.SSS} ] [ %-5level] %msg%n</Pattern>
+			<charset>utf8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_REQUEST}-%d{yyyy-MM-dd}</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+	
+	<property name="LOG_STATS" value="${LOG_PATH}/stat/atoistat.log"/>
+	<appender name="STATS_FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_STATS}</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%msg%n</Pattern>
+			<charset>utf8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_STATS}-%d{yyyy-MM-dd}</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+	
+	<logger name="SSBLogger" level="INFO" additivity="false">
+		<appender-ref ref="REQUEST_FILE" />
+	</logger>
+	
+	<logger name="StatsLogger" level="INFO" additivity="false">
+		<appender-ref ref="STATS_FILE" />
+	</logger>
+	
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>
